@@ -11,6 +11,8 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import EDD.HashTable;
+
 
 
 /**
@@ -137,7 +139,15 @@ public class Cargar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private static HashTable tablaHash; // Variable estática declarada correctamente aquí
+    
+    private static void procesarSecuencia(String secuencia) {
+        for (int i = 0; i <= secuencia.length() - 3; i++) {
+            String triplete = secuencia.substring(i, i + 3);
+            tablaHash.insertar(triplete, i);
+        }
+    }
+    
     private void CarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarActionPerformed
         // TODO add your handling code here:
         if (cargarArchivo != null) {
