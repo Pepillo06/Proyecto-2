@@ -6,62 +6,69 @@ package EDD;
 
 /**
  *
- * @author simon
+ * @author Jabri
  */
 public class ArbolBB {
-    NodoArbolBB inicial;
+    private NodoArbolBB raiz;
 
-    public ArbolBB(NodoArbolBB inicial) {
-        this.inicial = null;
+    public ArbolBB() {
+        this.raiz = null;
     }
-    
-    //Inserta un valor seleccionado por el usuario en el árbol
-    public void insertar(int valor) {
-        if (this.inicial == null)
-            this.inicial = new NodoArbolBB(valor);
-        else
-            this.inicial.insertar(valor);
+
+    public void insertar(String triplete, int frecuencia) {
+        raiz = insertarRec(raiz, triplete, frecuencia);
     }
-    
-    public NodoArbolBB llamarPreoder() {
-        this.preorder(this.inicial);
-        return this.inicial;
+
+    private NodoArbolBB insertarRec(NodoArbolBB nodo, String triplete, int frecuencia) {
+        if (nodo == null) {
+            return new NodoArbolBB(triplete, frecuencia);
+        }
+        
+        if (frecuencia < nodo.frecuencia) {
+            nodo.izquierdo = insertarRec(nodo.izquierdo, triplete, frecuencia);
+        } else if (frecuencia > nodo.frecuencia) {
+            nodo.derecho = insertarRec(nodo.derecho, triplete, frecuencia);
+        } else {
+            // Si frecuencias son iguales, ordenamos por triplete
+            if (triplete.compareTo(nodo.triplete) < 0) {
+                nodo.izquierdo = insertarRec(nodo.izquierdo, triplete, frecuencia);
+            } else {
+                nodo.derecho = insertarRec(nodo.derecho, triplete, frecuencia);
+            }
+        }
+        return nodo;
     }
-    
-    public void preorder(NodoArbolBB nodo) {
-        if (nodo == null)
-            return;
-        else
-            //Recordatorio: Aqui falta una funcion que marque las visitas, los prints no estan permitidos
-            preorder(nodo.getHijoIzq());
-            preorder(nodo.getHijoDer());
+
+    public String inOrden() {
+        StringBuilder sb = new StringBuilder();
+        inOrdenRec(raiz, sb);
+        return sb.toString();
     }
-    
-    public NodoArbolBB llamarInoder() {
-        this.inorder(this.inicial);
-        return this.inicial;
+
+    private void inOrdenRec(NodoArbolBB nodo, StringBuilder sb) {
+        if (nodo != null) {
+            inOrdenRec(nodo.izquierdo, sb);
+            sb.append("Triplete: ").append(nodo.triplete)
+              .append(", Frecuencia: ").append(nodo.frecuencia).append("\n");
+            inOrdenRec(nodo.derecho, sb);
+        }
     }
-    
-    public void inorder(NodoArbolBB nodo) {
-        if (nodo == null)
-            return;
-        else
-            inorder(nodo.getHijoIzq());
-            //Recordatorio: Aqui falta una funcion que marque las visitas, los prints no estan permitidos
-            inorder(nodo.getHijoDer());
+
+    public String getMasFrecuente() {
+        if (raiz == null) return "";
+        NodoArbolBB actual = raiz;
+        while (actual.derecho != null) {
+            actual = actual.derecho;
+        }
+        return actual.triplete + " (Frecuencia: " + actual.frecuencia + ")";
     }
-    
-    public NodoArbolBB llamarPostoder() {
-        this.postorder(this.inicial);
-        return this.inicial;
-    }
-    
-    public void postorder(NodoArbolBB nodo) {
-        if (nodo == null)
-            return;
-        else
-            postorder(nodo.getHijoIzq());
-            postorder(nodo.getHijoDer());
-            //Recordatorio: Aqui falta una funcion que marque las visitas, los prints no estan permitidos
+
+    public String getMenosFrecuente() {
+        if (raiz == null) return "";
+        NodoArbolBB actual = raiz;
+        while (actual.izquierdo != null) {
+            actual = actual.izquierdo;
+        }
+        return actual.triplete + " (Frecuencia: " + actual.frecuencia + ")";
     }
 }

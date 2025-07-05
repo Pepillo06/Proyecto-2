@@ -9,33 +9,51 @@ package EDD;
  * @author Jabri
  */
 public class NodoHash {
-    String triplete;
-    int frecuencia;
-    int[] posiciones; // Array estático para posiciones (sin ArrayList)
-    int posicionesCount; // Contador manual
-    NodoHash siguiente; // Encadenamiento
-
+    public final String triplete;
+    public int frecuencia;
+    private int[] posiciones;
+    public int contadorPosiciones;
+    public NodoHash siguiente;
+    
     public NodoHash(String triplete, int posicion) {
         this.triplete = triplete;
         this.frecuencia = 1;
-        this.posiciones = new int[10]; // Tamaño inicial
+        this.posiciones = new int[5];  // Tamaño inicial de 5
         this.posiciones[0] = posicion;
-        this.posicionesCount = 1;
+        this.contadorPosiciones = 1;
         this.siguiente = null;
     }
 
-    // Método para agregar una posición (sin List)
     public void agregarPosicion(int posicion) {
-        if (posicionesCount == posiciones.length) {
+        if (contadorPosiciones == posiciones.length) {
             // Redimensionar manualmente
-            int[] newPosiciones = new int[posiciones.length * 2];
-            for (int i = 0; i < posicionesCount; i++) {
-                newPosiciones[i] = posiciones[i];
+            int[] nuevoArray = new int[posiciones.length * 2];
+            for (int i = 0; i < posiciones.length; i++) {
+                nuevoArray[i] = posiciones[i];
             }
-            posiciones = newPosiciones;
+            posiciones = nuevoArray;
         }
-        posiciones[posicionesCount++] = posicion;
+        posiciones[contadorPosiciones++] = posicion;
         frecuencia++;
     }
-}
 
+    // Nuevo método para obtener la primera posición
+    public int obtenerPrimeraPosicion() {
+        if (contadorPosiciones > 0) {
+            return posiciones[0];
+        }
+        return -1;  // Valor por defecto si no hay posiciones
+    }
+
+    // Método para obtener todas las posiciones
+    public String obtenerPosicionesFormateadas() {
+        String resultado = "[";
+        for (int i = 0; i < contadorPosiciones; i++) {
+            resultado += posiciones[i];
+            if (i < contadorPosiciones - 1) {
+                resultado += ", ";
+            }
+        }
+        return resultado + "]";
+    }
+}

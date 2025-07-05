@@ -9,100 +9,103 @@ package EDD;
  * @author Jabri
  */
 public class HashTable {
-    private int size;
-    private NodoHash[] tabla;
-
-    public HashTable(int size) {
-        this.size = size;
-        this.tabla = new NodoHash[size];
+    private final int tamaño;
+    private final NodoHash[] tabla;
+    private NodoHash cabeza;
+    
+    public HashTable(int tamaño) {
+        this.tamaño = tamaño;
+        this.tabla = new NodoHash[tamaño];
     }
 
-    // Función hash (base 4 para A, T, C, G)
-    public int hashTriplete(String triplete) {
+    public int calcularHash(String triplete) {
         int hash = 0;
-        int base = 4;
         for (int i = 0; i < triplete.length(); i++) {
-            char c = triplete.charAt(i);
-            int value = 0;
-            switch (c) {
-                case 'A': value = 0; break;
-                case 'T': value = 1; break;
-                case 'C': value = 2; break;
-                case 'G': value = 3; break;
-                default: throw new Error("Carácter inválido: " + c);
-            }
-            hash = hash * base + value;
+            hash = (hash * 31) + triplete.charAt(i);
         }
-        return Math.abs(hash % size);
+        return hash < 0 ? -hash : hash; // Valor absoluto manual
     }
 
-    // Insertar triplete sin usar List
     public void insertar(String triplete, int posicion) {
-        int index = hashTriplete(triplete);
-        NodoHash nodoActual = tabla[index];
-
-        if (nodoActual == null) {
-            tabla[index] = new NodoHash (triplete, posicion);
-            return;
-        }
-
-        // Buscar el triplete en la lista enlazada
-        NodoHash previo = null;
-        while (nodoActual != null) {
-            if (nodoActual.triplete.equals(triplete)) {
-                nodoActual.agregarPosicion(posicion);
-                return;
+        int indice = calcularHash(triplete) % tamaño;
+        NodoHash nuevo = new NodoHash(triplete, posicion);
+        
+        if (tabla[indice] == null) {
+            tabla[indice] = nuevo;
+        } else {
+            NodoHash actual = tabla[indice];
+            while (actual.siguiente != null) {
+                if (actual.triplete.equals(triplete)) {
+                    actual.agregarPosicion(posicion);
+                    return;
+                }
+                actual = actual.siguiente;
             }
-            previo = nodoActual;
-            nodoActual = nodoActual.siguiente;
+            actual.siguiente = nuevo;
         }
-
-        // Si no existe, agregar al final
-        previo.siguiente = new NodoHash (triplete, posicion);
     }
 
-    // Buscar triplete
-    public NodoHash buscar(String triplete) {
-        int index = hashTriplete(triplete);
-        NodoHash nodoActual = tabla[index];
-
-        while (nodoActual != null) {
-            if (nodoActual.triplete.equals(triplete)) {
-                return nodoActual;
-            }
-            nodoActual = nodoActual.siguiente;
-        }
-        return null;
-    }
-
-    // Reporte de colisiones (sin List)
-    public String[] reporteColisiones() {
-        int count = 0;
-        // Contar colisiones
-        for (int i = 0; i < size; i++) {
-            if (tabla[i] != null && tabla[i].siguiente != null) {
-                count++;
-            }
-        }
-
-        String[] reporte = new String[count];
-        int idx = 0;
-        for (int i = 0; i < size; i++) {
-            if (tabla[i] != null && tabla[i].siguiente != null) {
-                reporte[idx++] = "Índice " + i + ": " + contarColisiones(tabla[i]) + " colisiones";
-            }
-        }
+    public String generarReporte() {
+        String reporte = "=== REPORTE ===\n";
+        reporte += "Total tripletes: " + contarTripletes() + "\n\n";
+        reporte += generarFrecuencias();
+        reporte += "\n" + generarColisiones();
         return reporte;
     }
 
-    private int contarColisiones(NodoHash nodo) {
-        int count = 0;
-        while (nodo != null) {
-            count++;
-            nodo = nodo.siguiente;
+    private int contarTripletes() {
+        int total = 0;
+        for (int i = 0; i < tamaño; i++) {
+            NodoHash actual = tabla[i];
+            while (actual != null) {
+                total++;
+                actual = actual.siguiente;
+            }
         }
-        return count - 1;
+        return total;
+    }
+
+    private String generarFrecuencias() {
+        String resultado = "FRECUENCIAS:\n";
+        for (int i = 0; i < tamaño; i++) {
+            NodoHash actual = tabla[i];
+            while (actual != null) {
+                resultado += actual.triplete + ": " + actual.frecuencia + " veces " + 
+                           actual.obtenerPosicionesFormateadas() + "\n";
+                actual = actual.siguiente;
+            }
+        }
+        return resultado;
+    }
+
+    private String generarColisiones() {
+        String resultado = "COLISIONES:\n";
+        int total = 0;
+        
+        for (int i = 0; i < tamaño; i++) {
+            int colisiones = 0;
+            NodoHash actual = tabla[i];
+            
+            while (actual != null && actual.siguiente != null) {
+                colisiones++;
+                actual = actual.siguiente;
+            }
+            
+            if (colisiones > 0) {
+                total += colisiones;
+                resultado += "Casilla " + i + ": " + colisiones + " colisiones\n";
+            }
+        }
+        
+        return resultado + "\nTotal colisiones: " + total;
+    }
+    public int contarColisiones() {
+        int contador = 0;
+        NodoHash actual = cabeza;
+        while (actual != null) {
+            contador++;
+            actual = actual.siguiente;
+        }
+        return contador > 1 ? contador - 1 : 0;
     }
 }
-
-
