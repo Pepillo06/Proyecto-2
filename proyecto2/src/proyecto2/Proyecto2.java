@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package proyecto2;
-
+import Interfaces.Bienvenida;
 /**
  *
  * @author User
@@ -15,6 +15,8 @@ public class Proyecto2 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Bienvenida p= new Bienvenida();
+        p.setVisible(true);
     }
     
 }
