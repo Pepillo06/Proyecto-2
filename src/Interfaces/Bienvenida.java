@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Angel
+ * @author Luis
  */
 public class Bienvenida extends javax.swing.JFrame {
 

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Interfaces;
-//import EDD.Arbol;
+import EDD.Arbol;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author Angel
+ * @author Luis
  */
 public class Cargar extends javax.swing.JFrame {
     /**
@@ -26,7 +26,7 @@ public class Cargar extends javax.swing.JFrame {
     /**
      * El arbol que representa la sopa de letras cargada desde el archivo.
      */
-//    public Arbol arbol;
+    public Arbol arbol;
 
     /**
      * La instancia de la ventana men&uaccute.
@@ -45,6 +45,7 @@ public class Cargar extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        botonAtras.setEnabled(true);
         
     }
     
@@ -139,6 +140,15 @@ public class Cargar extends javax.swing.JFrame {
 
     private void CarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarActionPerformed
         // TODO add your handling code here:
+        if (cargarArchivo != null) {
+            
+
+            this.setVisible(false);
+            Bienvenida b = new Bienvenida();
+            Menu menu = new Menu(this);
+            menu.setVisible(true);
+            
+        }
     }//GEN-LAST:event_CarActionPerformed
 
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
@@ -182,7 +192,7 @@ try (FileReader fr = new FileReader(fichero);
             datosDiccionario.append(linea).append(",");
         } else {
             linea = linea.replace(",", "");
-//            this.arbol = new Arbol(linea.length(), linea);
+            this.arbol = new Arbol(linea.length(), linea);
         }
         contenido.append(linea).append("\n");
     }
@@ -206,6 +216,11 @@ try (FileReader fr = new FileReader(fichero);
 
     private void botonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAtrasActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+
+        Bienvenida menu = new Bienvenida ();
+
+        menu.setVisible(true);
     }//GEN-LAST:event_botonAtrasActionPerformed
 
                  
