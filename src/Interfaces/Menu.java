@@ -3,32 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Interfaces;
-import EDD.Arbol;
+
 /**
  *
- * @author Luis
+ * @author Angel
  */
 public class Menu extends javax.swing.JFrame {
-     public Arbol arbol;
-    public String[] diccionario;
-    public static Cargar v1;
-    
-     /**
-     * Crea una nueva instancia de la clase {@code Menu}. Inicializa los
-     * componentes y configura la ventana.
-     *
-     * @param v1 la instancia de la ventana de carga
+
+    /**
+     * Creates new form Menu
      */
-    public Menu(Cargar v1) {
+    public Menu() {
         initComponents();
-        this.v1 = v1;
-        this.arbol = v1.arbol;
-        this.diccionario = v1.diccionario;
-        v1.setVisible(false);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-    
-        
     }
 
     /**
@@ -94,7 +80,7 @@ public class Menu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu(v1).setVisible(true);
+                new Menu().setVisible(true);
             }
         });
     }

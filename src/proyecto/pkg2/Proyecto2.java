@@ -6,7 +6,7 @@ package proyecto.pkg2;
 import Interfaces.Bienvenida;
 /**
  *
- * @author Luis
+ * @author Angel
  */
 public class Proyecto2 {
 
